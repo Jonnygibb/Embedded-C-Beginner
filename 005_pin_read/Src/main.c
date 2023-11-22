@@ -20,13 +20,14 @@
 
 int main(void)
 {
-	uint32_t *clock_control_enable, *gpiod_mode_register, *gpiod_output_data_register, *gpioa_mode_register, *gpioa_input_register;
-	clock_control_enable = (uint32_t*)0x40023830;
-	gpiod_mode_register = (uint32_t*)0x40020C00;
-	gpiod_output_data_register = (uint32_t*)0x40020C14;
+	// clock_control_enable is a constant pointer to uint32_t data that is volatile.
+	uint32_t volatile * const clock_control_enable = (uint32_t*)0x40023830;
+	uint32_t volatile * const gpiod_mode_register = (uint32_t*)0x40020C00;
+	uint32_t volatile * const gpiod_output_register = (uint32_t*)0x40020C14;
+	uint32_t volatile * const gpioa_mode_register = (uint32_t*)0x40020000;
 
-	gpioa_mode_register = (uint32_t*)0x40020000;
-	gpioa_input_register = (uint32_t*)0x40020014;
+	// gpioa_input_register is a constant pointer to uint32_t data that is volatile.
+	uint32_t volatile * const gpioa_input_register = (uint32_t*)0x40020014;
 
 	// Enable the clock for the GPIOA and GPIOD peripheral in the AHB1ENR.
 	// SETS the 0th and 3rd bit position to 1.
@@ -45,10 +46,10 @@ int main(void)
 	while(1) {
 		if(*gpioa_input_register & 1) {
 			// SETS the output of the data register for the GPIOD pin to be HIGH.
-			*gpiod_output_data_register |= 0x1<<12;
+			*gpiod_output_register |= 0x1<<12;
 		} else {
 			// CLEARS the output of the data register for the GPIOD pin to be LOW.
-			*gpiod_output_data_register &= ~(0x1<<12);
+			*gpiod_output_register &= ~(0x1<<12);
 		}
 
 	}
