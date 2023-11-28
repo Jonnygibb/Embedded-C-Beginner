@@ -26,8 +26,9 @@ int main(void)
 	uint32_t volatile * const gpiod_output_register = (uint32_t*)0x40020C14;
 	uint32_t volatile * const gpioa_mode_register = (uint32_t*)0x40020000;
 
-	// gpioa_input_register is a constant pointer to uint32_t data that is volatile.
-	uint32_t volatile * const gpioa_input_register = (uint32_t*)0x40020014;
+	// gpioa_input_register is a constant pointer to uint32_t data that is volatile,
+	// but should not be changed by the programmer.
+	uint32_t const volatile * const gpioa_input_register = (uint32_t*)0x40020014;
 
 	// Enable the clock for the GPIOA and GPIOD peripheral in the AHB1ENR.
 	// SETS the 0th and 3rd bit position to 1.
